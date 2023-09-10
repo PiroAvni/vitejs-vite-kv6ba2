@@ -1,11 +1,11 @@
 import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
-import { StoreState } from '../../store/store';
-import { doneSlice } from '../festures/slice/done';
+import { RootState } from '../../store/store';
+import { doneSlice } from '../../features/slice/done';
 import ColumnLayout from '../ColumnLayout';
 
 export function DoneColumn() {
-  const { done } = useSelector((state: StoreState) => state);
+  const { done } = useSelector((state: RootState) => state);
   const {
     actions: { completeStatus, remove, add, updateTextShowed },
   } = doneSlice;

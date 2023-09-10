@@ -13,8 +13,11 @@ import Collapse from '@mui/material/Collapse';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { useDispatch } from 'react-redux';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { AppDispatch } from '../../store/store';
-import { IColumnLayoutProps } from '../../types';
+import { RootState } from '../store/store';
+import { IColumnLayoutProps } from '../types';
+
+// Function Component Declaration:
+// This code defines a functional component named ColumnLayout, which takes an object of props with the following properties: labelText, addHandler, removeHandler, completedHandler, selectorState, droppableId, and updateTextShowed.
 
 const ColumnLayout: React.FC<IColumnLayoutProps> = ({
   labelText,
@@ -25,14 +28,24 @@ const ColumnLayout: React.FC<IColumnLayoutProps> = ({
   droppableId,
   updateTextShowed,
 }) => {
+  //   State Management with useState:
+  // This code initializes a state variable isError using the useState hook. isError is an object with two properties: isShow and text. It's used to manage error messages and their visibility.
   const [isError, setIsError] = useState({
     isShow: false,
     text: '',
   });
 
+  // More State and useDispatch:
+  // This code initializes another state variable textDescription, which will be used to capture text input from the user.
+  // It also retrieves the dispatch function from the Redux store using useDispatch. The type AppDispatch is used to specify the type of actions that can be dispatched.
   const [textDescription, setTextDescription] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
 
+  const dispatch = useDispatch<RootState>();
+
+  //   Input Change Handler:
+  // This function (handleOnChange) is called when the user types in the input field.
+  // It updates the textDescription state with the current input value.
+  // It also checks the length of the input and updates the isError state to show an error message if the input exceeds 200 characters.
   const handleOnChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +60,16 @@ const ColumnLayout: React.FC<IColumnLayoutProps> = ({
     });
   };
 
+  //   Input Blur Handler:
+  // This function (handleOnBlur) is called when the input field loses focus.
+  // It sets isError.isShow to false, hiding any error message that might have been displayed.
   const handleOnBlur = () => {
     setIsError({ ...isError, isShow: false });
   };
 
+  //   Button Click Handler:
+  // This function (handleOnClick) is called when the "Add Item" button is clicked.
+  // It checks if there are no errors (!isError.isShow) before dispatching the addHandler action with the textDescription and then clears the input field.
   const handleOnClick = () => {
     if (!isError.isShow) {
       dispatch(addHandler(textDescription));
@@ -58,6 +77,11 @@ const ColumnLayout: React.FC<IColumnLayoutProps> = ({
     }
   };
 
+  //   Input Key Down Handler:
+  // This function (handleInputKeyDown) is called when a key is pressed while the input field is in focus.
+  // It checks if the pressed key is 'Enter'.
+  // If 'Enter' is pressed and the input is not empty and within the character limit (200), it calls handleOnClick.
+  // If the input is empty or exceeds the character limit, it shows an error message.
   const handleInputKeyDown = ({
     target,
     key,
